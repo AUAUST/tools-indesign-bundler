@@ -1,2 +1,8 @@
 .DS_Store
 node_modules
+BUNDLES/*
+!BUNDLES/
+GLOBALS/*
+!GLOBALS/
+LOCALS/*
+!LOCALS/
