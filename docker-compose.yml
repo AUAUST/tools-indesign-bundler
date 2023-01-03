@@ -9,8 +9,8 @@ services:
     working_dir: /app
     volumes:
       - ${PWD}/bundler.js:/app/bundler.js:ro
-      - ${PWD}/BUNDLES:/app/BUNDLES:rw
-      - ${PWD}/PROJECTS:/app/PROJECTS:ro
-      - ${PWD}/GLOBALS:/app/GLOBALS:ro
+      - ${PWD}/SCRIPTS/BUNDLES:/app/BUNDLES:rw
+      - ${PWD}/SCRIPTS/PROJECTS:/app/PROJECTS:ro
+      - ${PWD}/SCRIPTS/GLOBALS:/app/GLOBALS:ro
       - ${PWD}/MODULES:/app/MODULES:ro
       - ${PWD}/.env:/app/.env:ro
