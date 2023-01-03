@@ -1,10 +1,9 @@
-###### AUAUST TOOLS — InDesign — Scripts
+###### AUAUST TOOLS — InDesign — Bundler
 
 ## About
 
-This repository contains various scripts that help automate InDesign processes. It uses Adobe's UXP scripting and .idjs files.
-Since UXP is a subset of JavaScript that doesn't support any kind of script importing (no library, no import, no require()), a bundler has also been created for this purpose.
-It basically concatenates files together in a very simple way using a declarative syntax inside comments. Explanation on how to use them available below.
+Since UXP is a subset of JavaScript that doesn't support any kind of script importing (no library, no import, no require()), a bundler has been created for this purpose.
+It basically concatenates files together in a very simple way using a declarative syntax inside comments. Explanation on how to use it available below.
 
 ## Directory structure
 
@@ -35,6 +34,7 @@ Those files are used for running the `bundler.js` script.
 └ BUNDLES/
   └ <namespaces>.idjs
 ```
+**Warning**: When cloning this repository, you'll get binary files instead of actual folders. This is because they are symlinks to AUAUST's private scripts. Before using the bundler, you'll need to replace those files by actual folders and put your own scripts inside of them.
 
 `GLOBALS` contains files that are made available globally by using the `useGlobal` statement.  
 `PROJECTS` is the directory where project subdirectories are located.  
