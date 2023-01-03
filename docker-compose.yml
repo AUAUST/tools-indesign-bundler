@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  bundler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: node bundler.js
+    working_dir: /app
+    volumes:
+      - ${PWD}/bundler.js:/app/bundler.js:ro
+      - ${PWD}/BUNDLES:/app/BUNDLES:rw
+      - ${PWD}/PROJECTS:/app/PROJECTS:ro
+      - ${PWD}/GLOBALS:/app/GLOBALS:ro
+      - ${PWD}/MODULES:/app/MODULES:ro
+      - ${PWD}/.env:/app/.env:ro
