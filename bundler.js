@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { consoleFormat, say, warn, error, fatal } = require("./MODULES/console.js");
-const dotenv = require("dotenv").config();
+// Is required to access .env variables
+require("dotenv").config();
 
 const time = {
   started: new Date(),
