@@ -26,15 +26,16 @@ Those files are used for running the `bundler.js` script.
 #### For the scripts
 
 ```
-├ GLOBALS/
-├ PROJECTS/
-│ └ <namespaces>
-│   ├ index.js
-│   └ IMPORTS/
-└ BUNDLES/
-  └ <namespaces>.idjs
+└ SCRIPTS/
+  ├ GLOBALS/
+  ├ PROJECTS/
+  │ └ <namespaces>
+  │   ├ index.js
+  │   └ IMPORTS/
+  └ BUNDLES/
+    └ <namespaces>.idjs
 ```
-**Warning**: When cloning this repository, you'll get binary files instead of actual folders. This is because they are symlinks to AUAUST's private scripts. Before using the bundler, you'll need to replace those files by actual folders and put your own scripts inside of them.
+**Warning**: `SCRIPTS here is a submodule pointing to AUAUST's private scripts. Before using the bundler, you'll need to replace that submodule by an actual folder and put your own scripts inside of it.
 
 `GLOBALS` contains files that are made available globally by using the `useGlobal` statement.  
 `PROJECTS` is the directory where project subdirectories are located.  
