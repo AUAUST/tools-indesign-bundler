@@ -13,6 +13,9 @@ function warn(message) {
 function error(message) {
   console.error(`${formatMessage(message, "error")}`);
 }
+function update(message) {
+  console.log(`${formatMessage(message, "update")}`);
+}
 function fatal(message) {
   console.error(`${formatMessage(message, "fatal")}`);
   process.exit();
@@ -23,6 +26,7 @@ function formatMessage(message, type) {
     types: {
       default: ` ${consoleFormat.RESET}OK! ${consoleFormat.GRAY}`,
       warn: ` ${consoleFormat.YELLOW}WRN ${consoleFormat.GRAY}`,
+      update: ` ${consoleFormat.PINK}NEW ${consoleFormat.GRAY}`,
       error: ` ${consoleFormat.RED}ERR ${consoleFormat.GRAY}`,
       fatal: ` ${consoleFormat.RED}FATAL ERROR! ${consoleFormat.GRAY}`,
     },
@@ -56,6 +60,7 @@ function timeTagNow() {
 module.exports = {
   say,
   warn,
+  update,
   error,
   fatal,
   consoleFormat,

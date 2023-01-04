@@ -3,6 +3,7 @@ const {
   consoleFormat,
   say,
   warn,
+  update,
   error,
   fatal,
 } = require("./MODULES/console.js");
@@ -38,25 +39,18 @@ const INDEX = {
 const FILES = {
   GLOBALS: {
     path: `${ENV.path}/GLOBALS/`,
-    required: [],
-    imported: [],
-    watchers: [],
     rawContents: {},
+    watchers: [],
     processedContents: {},
   },
   LOCALS: {
     path: `${ENV.projetPath}/IMPORTS/`,
-    required: [],
-    imported: [],
-    watchers: [],
     rawContents: {},
+    watchers: [],
     processedContents: {},
   },
 };
-const WATCHERS = {
-  local: [],
-  global: [],
-};
+
 time.ready = new Date();
 say(`${consoleFormat.GREEN}BUNDLER SCRIPT STARTED IN ${time.ready.getTime() - time.started.getTime()}ms${consoleFormat.RESET} —— See debug information below.`); //prettier-ignore
 
@@ -67,17 +61,17 @@ if (fs.existsSync(INDEX.path)) {
 }
 
 INDEX.actions.readFile.call(INDEX);
-INDEX.actions.parseFile.call(INDEX, WATCHERS);
+INDEX.actions.parseFile.call(INDEX, FILES);
 
 try {
   fs.watchFile(INDEX.path, (current, previous) => {
     if (current.mtime !== previous.mtime) {
       INDEX.actions.readFile.call(INDEX);
-      INDEX.actions.parseFile.call(INDEX);
+      INDEX.actions.parseFile.call(INDEX, FILES);
       updateBundle(`index updated`);
     }
   });
-  say(
+  update(
     `Started watching for the ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} here: ${INDEX.path}.`
   );
 } catch (e) {
@@ -155,7 +149,6 @@ function getAndCacheContent({ type, fileName, leftOffset }) {
   if (!object.watchers.includes(fileName)) {
     try {
       fs.watchFile(filePath, { interval: 5000 }, (current, previous) => {
-        say("update");
         fileWatcher({
           current: current,
           previous: previous,
@@ -166,7 +159,7 @@ function getAndCacheContent({ type, fileName, leftOffset }) {
         });
       });
       object.watchers.push(fileName);
-      say(`Watcher added to ${filePath}!`);
+      update(`Watcher added to ${filePath}!`);
     } catch (e) {
       error(`Failed to watch for ${filePath}. Error: ${e.message}`);
     }

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { say, error, warn, consoleFormat } = require("./console");
+const { say, error, warn, update, consoleFormat } = require("./console");
 
 // `this` keyword = `INDEX`
 function readFile() {
@@ -11,7 +11,11 @@ function readFile() {
     return null;
   }
 }
-function parseFile(WATCHERS) {
+function parseFile(FILES) {
+  let requiredWatchers = {
+    GLOBALS: [],
+    LOCALS: [],
+  };
   let readingRules = false;
   let leftOffset = 0;
   let processedContent = {
@@ -52,6 +56,7 @@ function parseFile(WATCHERS) {
                 }
               );
               if (parsedInstruction.type === "local") {
+                requiredWatchers.LOCALS.push(...parsedInstruction.arguments);
                 switch (parsedInstruction.position) {
                   case "before":
                     processedContent.beforeIndex.push(...individualizedRules);
@@ -74,6 +79,7 @@ function parseFile(WATCHERS) {
                     break;
                 }
               } else if (parsedInstruction.type === "global") {
+                requiredWatchers.GLOBALS.push(...parsedInstruction.arguments);
                 processedContent.topOfFile.push(...individualizedRules);
               }
             } else {
@@ -108,8 +114,28 @@ function parseFile(WATCHERS) {
       content: linesStack,
     });
   }
+  // Remove watcher from files deleted from the index
+  Object.keys(FILES).forEach((importType) => {
+    FILES[importType].watchers.forEach((importName) => {
+      if (!requiredWatchers[importType].includes(importName)) {
+        // Delete cached contents
+        FILES[importType].rawContents[importName] = undefined;
+        FILES[importType].processedContents[importName] = undefined;
+        // Remove the importName from the watchers array
+        FILES[importType].watchers.filter((currentImportName) => {
+          return currentImportName !== importName;
+        });
+        // Unwatch the file
+        fs.unwatchFile(`${FILES[importType]}${importName}.js`);
+        update(
+          `Stopped watching for ${FILES[importType].path}${importName}.js.`
+        );
+      }
+    });
+  });
 
   this.processedContent = processedContent;
+
   return processedContent;
 }
 
