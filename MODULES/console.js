@@ -64,4 +64,5 @@ module.exports = {
   error,
   fatal,
   consoleFormat,
+  timeTagNow,
 };
