@@ -1,5 +1,11 @@
 const fs = require("fs");
-const { consoleFormat, say, warn, error, fatal } = require("./MODULES/console.js");
+const {
+  consoleFormat,
+  say,
+  warn,
+  error,
+  fatal,
+} = require("./MODULES/console.js");
 // Is required to access .env variables
 require("dotenv").config();
 
@@ -61,7 +67,12 @@ try {
       updateBundle(`index updated`);
     }
   });
-  say(`Started watching for ${INDEX.path}.`);
+  say(
+    `${consoleFormat.AQUA}INDEX FOUND! ${consoleFormat.RESET}The current project is "${ENV.projectName}".`
+  );
+  say(
+    `Started watching for the ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} here: ${INDEX.path}.`
+  );
 } catch (e) {
   fatal(`Failed to watch for the index file. Error: ${e.message}`);
 }
