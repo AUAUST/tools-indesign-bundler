@@ -53,11 +53,21 @@ const FILES = {
     processedContents: {},
   },
 };
-
+const WATCHERS = {
+  local: [],
+  global: [],
+};
 time.ready = new Date();
 say(`${consoleFormat.GREEN}BUNDLER SCRIPT STARTED IN ${time.ready.getTime() - time.started.getTime()}ms${consoleFormat.RESET} —— See debug information below.`); //prettier-ignore
+
+if (fs.existsSync(INDEX.path)) {
+  say(
+    `${consoleFormat.AQUA}INDEX FOUND! ${consoleFormat.RESET}The current project is "${ENV.projectName}".`
+  );
+}
+
 INDEX.actions.readFile.call(INDEX);
-INDEX.actions.parseFile.call(INDEX);
+INDEX.actions.parseFile.call(INDEX, WATCHERS);
 
 try {
   fs.watchFile(INDEX.path, (current, previous) => {
@@ -67,9 +77,6 @@ try {
       updateBundle(`index updated`);
     }
   });
-  say(
-    `${consoleFormat.AQUA}INDEX FOUND! ${consoleFormat.RESET}The current project is "${ENV.projectName}".`
-  );
   say(
     `Started watching for the ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} here: ${INDEX.path}.`
   );

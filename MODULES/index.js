@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { say, error, warn } = require("./console");
+const { say, error, warn, consoleFormat } = require("./console");
 
 // `this` keyword = `INDEX`
 function readFile() {
@@ -11,7 +11,7 @@ function readFile() {
     return null;
   }
 }
-function parseFile() {
+function parseFile(WATCHERS) {
   let readingRules = false;
   let leftOffset = 0;
   let processedContent = {
@@ -22,7 +22,7 @@ function parseFile() {
   };
   let linesStack = "";
   // loops through each line
-  this.rawContent.split(/\n|\r/).forEach((line) => {
+  this.rawContent.split(/\n|\r/).forEach((line, lineIndex) => {
     // matches not empty and not // comments lines
     if (!/^\s*(\/\/.*)?$/.test(line)) {
       if (readingRules) {
@@ -36,7 +36,7 @@ function parseFile() {
           );
           // instruction isn't equal to null only if there is both a rule and at least on argument
           if (instruction != null) {
-            let parsedInstruction = parseInstruction.call({
+            let parsedInstruction = parseInstruction({
               rule: instruction.groups.rule,
               arguments: instruction.groups.arguments,
             });
@@ -76,6 +76,16 @@ function parseFile() {
               } else if (parsedInstruction.type === "global") {
                 processedContent.topOfFile.push(...individualizedRules);
               }
+            } else {
+              if (parsedInstruction.position === "illegal") {
+                warn(
+                  `Wrong @position specified in ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} at line ${lineIndex + 1}: "${line}". The instruction has been ignored.` // prettier-ignore
+                );
+              } else if (parsedInstruction.position === "unset") {
+                warn(
+                  `Missing @position in ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} at line ${lineIndex + 1}: "${line}". The instruction has been ignored.` // prettier-ignore
+                );
+              }
             }
           }
         }
@@ -103,25 +113,25 @@ function parseFile() {
   return processedContent;
 }
 
-function parseInstruction() {
+function parseInstruction(instruction) {
   let type = "";
   let position = "";
   let valid = true;
-  let arguments = this.arguments.split(/\s+/);
+  let arguments = instruction.arguments.split(/\s+/);
 
-  if (this.rule === "useLocal") {
+  if (instruction.rule === "useLocal") {
     type = "local";
     const indexOfPosition = arguments.findIndex((argument) => {
       return argument.startsWith("@");
     });
-    position = arguments.splice(indexOfPosition, 1)[0];
     // handles the lack of @position
-    if (position == null) {
+    if (indexOfPosition === -1) {
       valid = false;
       position = "unset";
     }
     // handles wrong @position
     else {
+      position = arguments.splice(indexOfPosition, 1)[0];
       if (["@here", "@before", "@after"].includes(position)) {
         position = position.slice(1);
       } // trims the @
@@ -130,7 +140,7 @@ function parseInstruction() {
         position = "illegal";
       }
     }
-  } else if (this.rule === "useGlobal") {
+  } else if (instruction.rule === "useGlobal") {
     type = "global";
   }
   return {
