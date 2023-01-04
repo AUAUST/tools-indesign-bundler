@@ -64,13 +64,17 @@ INDEX.actions.readFile.call(INDEX);
 INDEX.actions.parseFile.call(INDEX, FILES);
 
 try {
-  fs.watchFile(INDEX.path, (current, previous) => {
-    if (current.mtime !== previous.mtime) {
-      INDEX.actions.readFile.call(INDEX);
-      INDEX.actions.parseFile.call(INDEX, FILES);
-      updateBundle(`index updated`);
-    }
-  });
+  fs.watchFile(
+    INDEX.path,
+    (current, previous) => {
+      if (current.mtime !== previous.mtime) {
+        INDEX.actions.readFile.call(INDEX);
+        INDEX.actions.parseFile.call(INDEX, FILES);
+        updateBundle(`index updated`);
+      }
+    },
+    { interval: 4000 }
+  );
   update(
     `Started watching for the ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} here: ${INDEX.path}.`
   );
