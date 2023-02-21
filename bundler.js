@@ -20,7 +20,7 @@ const ENV = {
   path: process.env.PWD,
   scriptName: process.mainModule.filename.split("/").pop(),
   projectName: process.env.CURRENT_PROJECT ?? null,
-  projetPath: null,
+  projectPath: null,
   indexFile: process.env.INDEX_FILE ?? null,
 };
 if (ENV.projectName == null) {
@@ -28,10 +28,10 @@ if (ENV.projectName == null) {
     `Please provide a project name by setting CURRENT_PROJECT=<id> in .env file.`
   );
 }
-ENV.projetPath = `${ENV.path}/PROJECTS/${ENV.projectName}`;
+ENV.projectPath = `${ENV.path}/PROJECTS/${ENV.projectName}`;
 
 const INDEX = {
-  path: `${ENV.projetPath}/${ENV.indexFile ?? "index.js"}`,
+  path: `${ENV.projectPath}/${ENV.indexFile ?? "index.js"}`,
   rawContent: "",
   processedContent: {},
   actions: require("./MODULES/index"),
@@ -45,7 +45,7 @@ const FILES = {
     processedContents: {},
   },
   LOCALS: {
-    path: `${ENV.projetPath}/IMPORTS/`,
+    path: `${ENV.projectPath}/IMPORTS/`,
     rawContents: {},
     watchers: [],
     processedContents: {},
@@ -95,21 +95,25 @@ function updateBundle(source) {
     arrayOfSnippets.forEach((snippet) => {
       switch (snippet.type) {
         case "text":
-          bundleContents += snippet.content;
+          bundleContents += `/* Source: index */\n${snippet.content}`;
           break;
         case "local":
-          bundleContents += getAndCacheContent({
+          bundleContents += `/* Source: ${ENV.projectPath}/IMPORTS/${
+            snippet.fileName
+          }  */\n${getAndCacheContent({
             fileName: snippet.fileName,
             type: "LOCALS",
             leftOffset: snippet.leftOffset,
-          });
+          })}`;
           break;
         case "global":
-          bundleContents += getAndCacheContent({
+          bundleContents += `/* Source: GLOBALS/${snippet.type} / ${
+            snippet.fileName
+          } */\n${getAndCacheContent({
             fileName: snippet.fileName,
             type: "GLOBALS",
             leftOffset: snippet.leftOffset,
-          });
+          })}`;
           break;
       }
     });
