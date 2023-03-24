@@ -35,6 +35,7 @@ Those files are used for running the `bundler.js` script.
   └ BUNDLES/
     └ <namespaces>.idjs
 ```
+
 **Warning**: `SCRIPTS here is a submodule pointing to AUAUST's private scripts. Before using the bundler, you'll need to replace that submodule by an actual folder and put your own scripts inside of it.
 
 `GLOBALS` contains files that are made available globally by using the `useGlobal` statement.  
@@ -66,6 +67,10 @@ Before going further, be sure to have both `Docker` and `Docker Compose` install
 7. If you did all right with setting up the environment and folders, you should also see `OK! INDEX FILE FOUND!`. Otherwise, you should see some debug information helping you understand what you did wrong.
 8. You can navigate to `BUNDLES/` where you should find a new file: `GENERATE.idjs`!
 9. That's it! You have your bundler running. Every time you'll edit the index file, it'll be bundled again to `GENERATE.idjs`.
+
+> **Note A**: If you want to run the bundler without Docker, you can run `node bundler.js` instead. You'll need to have Node.js installed and the `SCRIPTS` folder in the root of the directory. If you do so, don't forget to install the dependencies with `npm|yarn install` before running the script.
+
+> **Note B**: `docker compose run -e CURRENT_PROJECT=<name> bundler` is a way to run the bundler with a different project without having to edit the `.env` file. This is useful if you want to bundle multiple projects at once or don't want want to edit a file each time you want to switch projects.
 
 #### Using the bundler's import system
 
