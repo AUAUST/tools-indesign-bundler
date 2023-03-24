@@ -1,4 +1,7 @@
 const fs = require("fs");
+
+const REFRESH_INTERVAL = 3000;
+
 const {
   consoleFormat,
   say,
@@ -79,7 +82,7 @@ try {
         updateBundle(`index updated`);
       }
     },
-    { interval: 4000 }
+    { interval: REFRESH_INTERVAL }
   );
   update(
     `Started watching for the ${consoleFormat.AQUA}INDEX${consoleFormat.GRAY} here: ${INDEX.path}.`
