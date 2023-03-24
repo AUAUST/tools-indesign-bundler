@@ -61,7 +61,12 @@ if (fs.existsSync(INDEX.path)) {
   );
 }
 
-INDEX.actions.readFile.call(INDEX);
+const indexContent = INDEX.actions.readFile.call(INDEX);
+if (indexContent === null) {
+  fatal(
+    `Failed to read the index file. The used project name was "${ENV.projectName}" and the index file should've been "${INDEX.path}".`
+  );
+}
 INDEX.actions.parseFile.call(INDEX, FILES);
 
 try {
