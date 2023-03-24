@@ -68,9 +68,7 @@ Before going further, be sure to have both `Docker` and `Docker Compose` install
 8. You can navigate to `BUNDLES/` where you should find a new file: `GENERATE.idjs`!
 9. That's it! You have your bundler running. Every time you'll edit the index file, it'll be bundled again to `GENERATE.idjs`.
 
-> **Note A**: If you want to run the bundler without Docker, you can run `node bundler.js` instead. You'll need to have Node.js installed and the `SCRIPTS` folder in the root of the directory. If you do so, don't forget to install the dependencies with `npm|yarn install` before running the script.
-
-> **Note B**: `docker compose run -e CURRENT_PROJECT=<name> bundler` is a way to run the bundler with a different project without having to edit the `.env` file. This is useful if you want to bundle multiple projects in parallel or don't want want to edit the dotenv file each time you switch projects.
+> **Note**: `docker compose run -e CURRENT_PROJECT=<name> bundler` is a way to run the bundler with a different project without having to edit the `.env` file. This is useful if you want to bundle multiple projects in parallel or don't want want to edit the dotenv file each time you switch projects.
 
 #### Using the bundler's import system
 
