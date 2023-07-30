@@ -1,5 +1,11 @@
 ###### AUAUST TOOLS — InDesign — Bundler
 
+> ## Archived
+> The aim of this project was to create a simple way to bundle multiple source files into a single script to compensed for the lack of similar features in InDesign's implementation of JavaScript, even with UXP.
+> It did work but in a way that wasn't as easy to use as we would have liked. For this reason, we decided to switch to Rollup and archived this project.
+> 
+> If you find this project useful or interesting and would like to use it as a starting point for another project, please send us an email at [hello@auaust.ch](mailto:hello@auaust.ch).
+
 ## About
 
 Since UXP is a subset of JavaScript that doesn't support any kind of script importing (no library, no import, no require()), a bundler has been created for this purpose.
